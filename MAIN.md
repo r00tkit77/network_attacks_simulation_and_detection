@@ -56,7 +56,7 @@ Time for some DOS. *ICMP Flood* attack using linux's ping utility.
 ![image](https://github.com/user-attachments/assets/5cc06116-6093-412a-bcae-08af3eb6f5aa)
 <br><br>
 
-Another DOS, this time *TCP syn Flood* using hping3.
+Another DOS, this time *TCP syn Flood* using hping3 on port 2221.
 
 *hping3 -S --flood -p 2221 192.168.1.9*
 
@@ -101,7 +101,87 @@ To detect ping sweep, using filter *arp* as nmap by default uses ARP requests on
 
 ![image](https://github.com/user-attachments/assets/b9290113-14fc-4207-8fb7-b98627f59a6a)
 
-ARP broadcast in the subnet asking for every host's MAC address confirms ping sweep.
+ARP broadcast in the subnet asking for every host's MAC address confirms ping sweep. However, it can also be ARP request flood attack but here we have one request per host in sequential order.
+<br><br>
+
+For detecting nmap TCP scans, use the filter *tcp.flags.syn==1 and tcp.flags.ack==0*. Nmap TCP Connect scans complete the 3 Way TCP Handshake while the Syn scan doesn't. However, in both the cases the first step of the 3 way handshake is done which involves sending a TCP packet with only the syn flag set to 1. 
+
+![image](https://github.com/user-attachments/assets/a2e92b9f-2c8b-40bf-bb80-efb05f71539c)
+
+The filtered packets show a host sending TCP syn packets to various commonly used ports, confirming the TCP scan.
+<br><br>
+
+**Note:** To differentiate between TCP connect and syn scans, follow TCP stream of a suspected packet to check if the handshake was completed or not.
+
+![image](https://github.com/user-attachments/assets/8e3dbc05-8081-47fe-8c39-87ccc73d6633)
+A completed handshake confirms a TCP connect scan.
+
+![image](https://github.com/user-attachments/assets/98d82fa2-fa4e-4bc0-9b9c-cde66d78b05d)
+An incomplete handshake confims a TCP syn scan.
+<br><br>
+
+To detect nmap UDP scans, the filter *(icmp.type==3 and icmp.code==3)* can be used. An open port doesn't reply to UDP scans but a closed port will send ICMP Destination and Port Unreachable error.
+
+![image](https://github.com/user-attachments/assets/c55dc7e6-c5cc-4cb2-91df-c5e8b58b097b)
+
+Multiple ICMP port and destination unreachable errors confirm the UDP scan.
+<br><br>
+
+Brute force attacks on FTP can be detected using *ftp.response.code == 530*. FTP error code 530 represents login authentication failure.
+
+![image](https://github.com/user-attachments/assets/021409ba-3ccb-45cc-96e4-02f74cb834c0)
+
+Multiple login failures reflect brute force attack.
+
+
+To see the attempted usernames and passwords use: *ftp.request.command==”USER”* and *ftp.request.command==”PASS”*
+
+![image](https://github.com/user-attachments/assets/4cc17c73-39b3-4988-a244-bd1b096a311f)
+
+![image](https://github.com/user-attachments/assets/1f2ad56f-67b8-4457-8323-54e5ef84d859)
+
+Spike in I/O Graph also indicates a brute force attack.
+
+![image](https://github.com/user-attachments/assets/9fb4d68e-2291-4ec8-9a75-047c5bc0e7c0)
+<br><br>
+
+ICMP floods can be detected with *icmp* to check for huge no. of ICMP requests from a single source.
+
+![image](https://github.com/user-attachments/assets/0edee4ef-b76b-485b-adf6-652d45627546)
+
+The I/O graph indicates the same.
+
+![image](https://github.com/user-attachments/assets/08bafc1d-d949-466c-8ba4-c561e9d558e2)
+<br><br>
+
+TCP syn flood can also be detected using *tcp.flags.syn == 1 && tcp.flags.ack == 0*.
+
+![image](https://github.com/user-attachments/assets/d16a4ed7-2870-46c1-8206-cd95f1b6d3b3)
+
+Huge no. of TCP syn packets to the same port of the target indicates TCP syn flooding.
+
+![image](https://github.com/user-attachments/assets/e9ca0b1d-2be6-4968-b095-be4f0ceaa16f)
+
+The I/O graph indicates the same.
+<br><br>
+
+To detect the final attack that is ARP Spoofing, we will again use *arp*
+
+![image](https://github.com/user-attachments/assets/350b8774-7604-4e37-a495-8cb8d3d93a16)
+
+Two different IPs (192.168.1.1 and 192.168.19) claiming to have the same MAC address with unsolicited ARP response, confirms a Man in the Middle attack with ARP Spoofing.
+
+![image](https://github.com/user-attachments/assets/2793e2d4-cc5c-4e68-94d5-16db5a9465f0)
+
+The MAC address in the ARP response belongs to the attacker (192.168.1.16).
+<br><br><br><br>
+
+That's it for this project. We have successfully conducted various network attacks and then detected them with wireshark.
+<br><br>
+
+
+***THE END***
+
 
 
 
