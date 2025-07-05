@@ -4,8 +4,8 @@ Started traffic capture on a WLAN then launched attacks on other hosts in the ne
 Did this as a cyber security project.
 
 The .pcapng file is provided in this repository.
-Password: Rootkit
+*Password: Rootkit*
 
-.pcapng file md5 hash: aa3bb96a3ac78dd4c8371fc9f577972e
+.pcapng file *md5 hash: aa3bb96a3ac78dd4c8371fc9f577972e*
 
-**DISCLAIMER:** This project is for **educational purposes only**. All attacks were performed in a controlled lab environment on devices I own. Never use these techniques on unauthorized networks or systems.
+**DISCLAIMER:** This project is for ***educational purposes only***. All attacks were performed in a controlled lab environment on devices I own. Never use these techniques on unauthorized networks or systems.
