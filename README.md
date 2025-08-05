@@ -1,5 +1,5 @@
 # network_attacks_simulation_and_detection
-**Project Objective:** To simulate network attacks like port scanning, brute force, DOS and spoofing on a WLAN using various tools followed by detection and analysis of attacks with Wireshark.
+**Project Objective:** To simulate network attacks such as port scanning, brute force, DOS, spoofing on a WLAN using various tools followed by detection and analysis of attacks with Wireshark.
 
 **Tools Used:** Nmap, Hydra, Ping, Hping3, Arpspoof, TCPDump, Wireshark
 
